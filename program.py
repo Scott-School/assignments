@@ -82,5 +82,4 @@ if playerWins == games :
 else :
     print("You lost.")
 
-print("Thanks for playing.")
-print("Please play again!")
+print("Thanks for playing!")
