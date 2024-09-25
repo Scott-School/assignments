@@ -7,6 +7,10 @@ from random import *
 
 
 def standings() :
+    global computerWins
+    global games
+    global playerWins
+
     print(f"The standings are...\nComputer: {computerWins}/{games}.\nPlayer: {playerWins}/{games}")
 
 def computerMath() :
@@ -25,27 +29,32 @@ def tie() :
     standings()
 
 def win() :
+    global playerWins
     playerWins = playerWins + 1
     print("You beat the computer!")
     standings()
 
 def loss() :
+    global computerWins
     computerWins = computerWins + 1
     print("You lost.")
     standings()
 
 
-print("------- WELCOME TO ROCK PAPER SCISSORS -------")
+print("\n\n------- WELCOME TO ROCK PAPER SCISSORS -------")
 
 games = int(input("How many matches would you like to play?\n> "))
 computerWins = 0
 playerWins = 0
 computerChoice = 0
 
-while playerWins or computerWins < games :
-    playerChoice = input("Please select rock (R), paper (P) or scissors (S).")
+while playerWins < games and computerWins < games :
+    playerChoice = input("\nPlease select rock (R), paper (P) or scissors (S).\n> ")
+    playerChoice = playerChoice.upper()
     computerMath()
 
+    if playerChoice == "quit" :
+        break
     if computerChoice == "R" :
         if playerChoice == "R" :
             tie()
@@ -55,8 +64,22 @@ while playerWins or computerWins < games :
             loss()
     elif computerChoice == "P" :
         if playerChoice == "R" :
-            tie()
-        elif playerChoice == "P" :
-            win()
-        elif playerChoice == "S" :
             loss()
+        elif playerChoice == "P" :
+            tie()
+        elif playerChoice == "S" :
+            win()
+    elif computerChoice == "S" :
+        if playerChoice == "R" :
+            win()
+        elif playerChoice == "P" :
+            loss()
+        elif playerChoice == "S" :
+            tie()
+
+if playerWins == games :
+    print("You won!")
+else :
+    print("You lost.")
+    
+print("Thanks for playing!")
