@@ -2,6 +2,7 @@
 # PROG 10004
 # Rock paper scissors assignment.
 # This is not complex and doesn't require multiple files.
+# TODO: Make the entire thing run on a loop that can be replayed at the end of the game.
 
 from math import *
 from random import *
@@ -14,6 +15,19 @@ def standings() :
     global computerChoice
     global playerChoice
 
+    if computerChoice == "R" :
+        computerChoice = "Rock"
+    elif computerChoice == "P" :
+        computerChoice = "Paper"
+    elif computerChoice == "S" :
+        computerChoice == "Scissors"
+
+    if playerChoice == "R" :
+        playerChoice = "Rock"
+    elif playerChoice == "P" :
+        playerChoice = "Paper"
+    elif playerChoice == "S" :
+        playerChoice == "Scissors"
     print(f"Computer: {computerChoice} vs Player: {playerChoice}")
     print(f"The standings are...\nComputer: {computerWins}/{games}.\nPlayer: {playerWins}/{games}")
 
@@ -54,7 +68,15 @@ def loss() :
 
 print("\n-------------- WELCOME TO ROCK PAPER SCISSORS --------------")
 print("Instructions:\nYou are playing rock paper and scissors against the worlds strongest super computer.\n If you don't beat it, It will take over the world!")
-games = int(input("\nHow many matches would you like to play?\n> "))
+
+
+# Simple insurance for minimum required number of games.
+games = 0
+while games <= 0 :
+    games = int(input("\nHow many matches would you like to play?\n> "))
+    if games <=0 :
+        print("Please input a valid number of games.")
+
 computerWins = 0
 playerWins = 0
 computerChoice = 0
@@ -63,53 +85,75 @@ playerChoice = 0
 # Main logic loop so that we can tell who wins/loses. 
 # Also tells us which score we need to add to.
 
-while playerWins < games and computerWins < games :
-    playerChoice = input("\n\nPlease select rock (R), paper (P) or scissors (S).\n> ")
+active = True
+while active == True:
+    while playerWins < games and computerWins < games :
+        playerChoice = input("\n\nPlease select rock (R), paper (P) or scissors (S).\n> ")
 
-    # Refines player and computer choices so they can be evaluated.
-    playerChoice = playerChoice.upper()
-    randomRPS()
+        # Quits application.
+        if playerChoice == "quit" :
+            break
 
-    # Quits application.
-    if playerChoice == "quit" :
-        break
+        # Refines player and computer choices so they can be evaluated.
+        playerChoice = playerChoice.upper()
+        playerChoice = playerChoice[0]
+        randomRPS()
 
-    # Logic for computer - rock
-    if computerChoice == "R" :
-
+        # Logic for computer - rock
         if playerChoice == "R" :
-            tie()
+
+            if computerChoice == "R" :
+                tie()
+            elif computerChoice == "P" :
+                loss()
+            elif computerChoice == "S" :
+                win()
+
+        # Logic for computer - paper
         elif playerChoice == "P" :
-            win()
+
+            if computerChoice == "R" :
+                win()
+            elif computerChoice == "P" :
+                tie()
+            elif computerChoice == "S" :
+                loss()
+
+        # Logic for computer - scissors
         elif playerChoice == "S" :
-            loss()
 
-    # Logic for computer - paper
-    elif computerChoice == "P" :
+            if computerChoice == "R" :
+                loss()
+            elif computerChoice == "P" :
+                win()
+            elif computerChoice == "S" :
+                tie()
 
-        if playerChoice == "R" :
-            loss()
-        elif playerChoice == "P" :
-            tie()
-        elif playerChoice == "S" :
-            win()
+        # Ensures only rock paper and scissors are played
+        else :
+            print("Please input a valid option.")
+    
 
-    # Logic for computer - scissors
-    elif computerChoice == "S" :
+    # Concludes the game with a fun message, and asks to play again.
+    if playerWins == games :
+        print("\n\n\nYou stopped the computer from taking over!\nCongratulations!   (GOOD ENDING)")
+    elif computerWins == games :
+        print("\n\n\nYou let the computer take over... (BAD ENDING)")
+    
+    print("Thanks for playing!")
 
-        if playerChoice == "R" :
-            win()
-        elif playerChoice == "P" :
-            loss()
-        elif playerChoice == "S" :
-            tie()
+    again = input("\nWould you like to play again? (y/N)\n> ")
+    again = again.upper()
 
+    if again == "" :
+        active = False
+    
+    elif again[0] == "Y" :
+        computerWins = 0
+        playerWins = 0
+        computerChoice = 0
+        playerChoice = 0
+        continue
 
-# Concludes the game with a fun message!
-
-if playerWins == games :
-    print("\n\n\nYou stopped the computer from taking over!\nCongratulations! (GOOD ENDING)")
-else :
-    print("\n\n\nYou let the computer take over... (BAD ENDING)")
-
-print("Thanks for playing!")
+    else :
+        active = False
